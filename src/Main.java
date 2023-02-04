@@ -1,34 +1,16 @@
-import java.util.Scanner;
-import java.text.NumberFormat;
-
-
 public class Main {
+
     public static void main(String[] args) {
-        final byte MONTHS_IN_YEAR = 12;
-        final byte PERCENT = 100;
+        int principal = (int) Console.readNumber("Principal: ", 1000, 1_000_000);
+        float annualInterestRate = (float) Console.readNumber("Annual Interest Rate: ", 1, 30);
+        byte years = (byte) Console.readNumber("Period (Years): ", 1, 30);
 
-        // Instantiate a Scanner object to access Terminal input
-        Scanner scanner = new Scanner(System.in);
+        MortgageCalculator mortgageCalculator = new MortgageCalculator(principal, annualInterestRate, years);
 
-        System.out.print("Principal: ");
-        int principal = scanner.nextInt();
+        MortgageReport mortgageReport = new MortgageReport(mortgageCalculator);
 
-        System.out.print("\n Annual Interest Rate: ");
-        float annualInterestRate = scanner.nextFloat();
-        float monthlyInterestRate = annualInterestRate / PERCENT / MONTHS_IN_YEAR;
-
-        System.out.print("\nPeriod (Years): ");
-        byte years = scanner.nextByte();
-
-        int paymentMonths = years * MONTHS_IN_YEAR;
-
-        double mortgage = principal
-                * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, paymentMonths))
-                / (Math.pow(1 + monthlyInterestRate, paymentMonths) - 1);
-
-        String monthlyMortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
-
-        System.out.println("Mortgage: " + monthlyMortgageFormatted);
-
+        mortgageReport.printMortgage();
+        mortgageReport.printPaymentSchedule();
     }
+
 }
